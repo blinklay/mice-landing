@@ -4,8 +4,14 @@ import mouseWhitePic from "../assets/images/mouseWhite.png";
 import mouseBluePic from "../assets/images/mouseBlue.png";
 import mouseSide from "../assets/images/mouseSide.png";
 import mouseUnder from "../assets/images/mouseUnder.png";
+import mouseFull from "../assets/images/mouseFull.png";
+import mouseLight from "../assets/images/mouseLight.png";
 import adapterPic from "../assets/images/adapter.png";
 import Footer from "../components/Footer";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+} from "react-compare-slider";
 
 export default function HomePage() {
   return (
@@ -29,7 +35,6 @@ export default function HomePage() {
           >
             Минимум веса — максимум точности
           </p>
-
           <img
             src={mousePic}
             className="mx-auto max-w-1/2 mt-10 animate-[float_4s_ease-in-out_infinite]"
@@ -41,7 +46,12 @@ export default function HomePage() {
       </section>
       <section className="min-h-screen flex items-center ">
         <div className="max-w-6xl mx-auto px-4 flex gap-10 items-center relative justify-start gap-20 ">
-          <img src={mouseSide} className="w-2/3" />
+          <div className="w-2/3 h-full">
+            <ReactCompareSlider
+              itemOne={<ReactCompareSliderImage src={mouseLight} />}
+              itemTwo={<ReactCompareSliderImage src={mouseFull} />}
+            />
+          </div>
           <div className="absolute left-[40%] top-1/2 -translate-y-1/2 -z-10">
             <div className="w-[400px] h-[400px] bg-[#fef9ad]/10 blur-[120px] rounded-full"></div>
           </div>
