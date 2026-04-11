@@ -1,22 +1,9 @@
 import React from "react";
 import { CartItem } from "./CartItem";
+import useCartStore from "../feauters/cart/useCartStore";
 
 export default function CartModal() {
-  const cart = [
-    {
-      id: "1",
-      name: "Phantom X Wireless",
-      price: 89.99,
-      description:
-        "Легкая игровая мышь с перфорированным корпусом и минималистичным дизайном. Подходит для быстрых FPS игр.",
-      image: "/images/mouse-1.png",
-      brand: "Phantom",
-      category: "Gaming Mouse",
-      countInStock: 12,
-      rating: 4.7,
-      numReviews: 34,
-    },
-  ];
+  const cart = useCartStore((state) => state.cart);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
