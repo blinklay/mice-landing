@@ -8,7 +8,7 @@ export default function Header({ setShowCart }) {
 
   return (
     <header
-      className="fixed top-0 left-0 w-full z-50 
+      className="fixed top-0 left-0 w-full z-20 
   bg-white/5 backdrop-blur-md 
   border-b border-white/10"
     >

@@ -2,7 +2,6 @@ import React from "react";
 import mousePic from "../assets/images/mouse.png";
 import mouseWhitePic from "../assets/images/mouseWhite.png";
 import mouseBluePic from "../assets/images/mouseBlue.png";
-import mouseSide from "../assets/images/mouseSide.png";
 import mouseUnder from "../assets/images/mouseUnder.png";
 import mouseFull from "../assets/images/mouseFull.png";
 import mouseLight from "../assets/images/mouseLight.png";
@@ -12,10 +11,21 @@ import {
   ReactCompareSlider,
   ReactCompareSliderImage,
 } from "react-compare-slider";
+import { useProductStore } from "../../feauters/useProductStore";
+import { useEffect } from "react";
+import ErrorAlert from "../components/ErrorAlert";
 
 export default function HomePage() {
+  const fetchProducts = useProductStore((state) => state.fetchProducts);
+  const error = useProductStore((state) => state.error);
+  const loading = useProductStore((state) => state.loading);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <>
+      {error && <ErrorAlert message={error} />}
       <section className="min-h-screen flex items-center relative">
         <div className="absolute inset-0 flex justify-center items-center -z-10">
           <div className="w-[700px] h-[700px] bg-yellow-300/20 blur-[160px] rounded-full"></div>
@@ -168,77 +178,150 @@ export default function HomePage() {
       </section>
 
       <section className="min-h-screen flex items-center justify-center text-center relative">
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 -z-10">
-          <div className="w-[500px] h-[500px] bg-yellow-500/10 blur-[160px] rounded-full"></div>
-        </div>
+        {loading ? (
+          <>
+            <div className="max-w-5xl mx-auto px-4">
+              {/* заголовок */}
+              <div className="h-8 w-64 mx-auto bg-white/10 rounded-md animate-pulse" />
+              <div className="h-6 w-96 mx-auto bg-white/5 rounded-md mt-4 animate-pulse" />
 
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 -z-10">
-          <div className="w-[500px] h-[500px] bg-blue-500/20 blur-[160px] rounded-full"></div>
-        </div>
+              {/* карточки */}
+              <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="bg-white/5 border border-white/10 rounded-xl p-6"
+                  >
+                    {/* image */}
+                    <div className="w-full h-48 bg-white/10 rounded-lg animate-pulse" />
 
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-semibold">
-            Выбери своё настроение
-          </h2>
-
-          <p className="text-gray-400 mt-3 text-2xl">
-            Phantom X Wireless в трёх стилях
-          </p>
-
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group cursor-pointer">
-              <div
-                className="bg-white/5 border border-white/10 rounded-xl p-6 
-          hover:border-[#fef9ad]/40 transition"
-              >
-                <img
-                  src={mousePic}
-                  className="w-full h-48 object-contain mx-auto"
-                />
-
-                <p className="mt-4 text-sm text-gray-400">Classic</p>
-                <p className="text-[#fef9ad] font-medium">Black</p>
+                    {/* текст */}
+                    <div className="h-4 w-20 bg-white/10 rounded mt-4 animate-pulse" />
+                    <div className="h-5 w-16 bg-white/20 rounded mt-2 animate-pulse" />
+                  </div>
+                ))}
               </div>
-            </div>
 
-            <div className="group cursor-pointer">
-              <div
-                className="bg-white/5 border border-white/10 rounded-xl p-6 
+              {/* кнопка */}
+              <div className="h-12 w-40 mx-auto bg-[#fef9ad]/20 rounded-xl mt-10 animate-pulse" />
+            </div>
+          </>
+        ) : (
+          <>
+            {error ? (
+              <>
+                <div className="flex flex-col items-center justify-center text-center">
+                  {/* glow */}
+                  <div className="absolute inset-0 flex justify-center items-center -z-10">
+                    <div className="w-[400px] h-[400px] bg-red-500/10 blur-[140px] rounded-full"></div>
+                  </div>
+
+                  {/* иконка */}
+                  <div
+                    className="w-16 h-16 rounded-full bg-red-500/10 
+      flex items-center justify-center mb-6
+      border border-red-400/20"
+                  >
+                    <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse" />
+                  </div>
+
+                  {/* заголовок */}
+                  <h2 className="text-2xl md:text-3xl font-semibold">
+                    Что-то пошло не так
+                  </h2>
+
+                  {/* текст */}
+                  <p className="text-gray-400 mt-3 max-w-sm">
+                    Не удалось загрузить варианты. Попробуйте снова.
+                  </p>
+
+                  {/* кнопка */}
+                  <button
+                    className="mt-6 px-6 py-2 border border-red-400/30 
+      text-red-300 rounded-lg 
+      hover:bg-red-500/10 transition"
+                  >
+                    Повторить
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 -z-10">
+                  <div className="w-[500px] h-[500px] bg-yellow-500/10 blur-[160px] rounded-full"></div>
+                </div>
+
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 -z-10">
+                  <div className="w-[500px] h-[500px] bg-blue-500/20 blur-[160px] rounded-full"></div>
+                </div>
+
+                <div className="max-w-5xl mx-auto px-4">
+                  <h2 className="text-3xl md:text-4xl font-semibold">
+                    Выбери своё настроение
+                  </h2>
+
+                  <p className="text-gray-400 mt-3 text-2xl">
+                    Phantom X Wireless в трёх стилях
+                  </p>
+
+                  <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="group cursor-pointer">
+                      <div
+                        className="bg-white/5 border border-white/10 rounded-xl p-6 
           hover:border-[#fef9ad]/40 transition"
-              >
-                <img
-                  src={mouseWhitePic}
-                  className="w-full h-48 object-contain mx-auto"
-                />
+                      >
+                        <img
+                          src={mousePic}
+                          className="w-full h-48 object-contain mx-auto"
+                        />
 
-                <p className="mt-4 text-sm text-gray-400">Clean</p>
-                <p className="text-[#fef9ad] font-medium">White</p>
-              </div>
-            </div>
+                        <p className="mt-4 text-sm text-gray-400">Classic</p>
+                        <p className="text-[#fef9ad] font-medium">Black</p>
+                      </div>
+                    </div>
 
-            <div className="group cursor-pointer">
-              <div
-                className="bg-white/5 border border-white/10 rounded-xl p-6 
+                    <div className="group cursor-pointer">
+                      <div
+                        className="bg-white/5 border border-white/10 rounded-xl p-6 
           hover:border-[#fef9ad]/40 transition"
-              >
-                <img
-                  src={mouseBluePic}
-                  className="w-full h-48 object-contain mx-auto"
-                />
+                      >
+                        <img
+                          src={mouseWhitePic}
+                          className="w-full h-48 object-contain mx-auto"
+                        />
 
-                <p className="mt-4 text-sm text-gray-400">Cold</p>
-                <p className="text-[#fef9ad] font-medium">Ice Blue</p>
-              </div>
-            </div>
-          </div>
+                        <p className="mt-4 text-sm text-gray-400">Clean</p>
+                        <p className="text-[#fef9ad] font-medium">White</p>
+                      </div>
+                    </div>
 
-          <button
-            className="mt-10 px-8 py-3 bg-[#fef9ad] text-black rounded-xl 
+                    <div className="group cursor-pointer">
+                      <div
+                        className="bg-white/5 border border-white/10 rounded-xl p-6 
+          hover:border-[#fef9ad]/40 transition"
+                      >
+                        <img
+                          src={mouseBluePic}
+                          className="w-full h-48 object-contain mx-auto"
+                        />
+
+                        <p className="mt-4 text-sm text-gray-400">Cold</p>
+                        <p className="text-[#fef9ad] font-medium">Ice Blue</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    className="mt-10 px-8 py-3 bg-[#fef9ad] text-black rounded-xl 
       font-medium hover:scale-105 transition"
-          >
-            Купить
-          </button>
-        </div>
+                  >
+                    Купить
+                  </button>
+                </div>
+              </>
+            )}
+          </>
+        )}
       </section>
 
       <Footer />
